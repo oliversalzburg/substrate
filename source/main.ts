@@ -109,7 +109,6 @@ const applicationOptions = {
 type ApplicationOptions = typeof applicationOptions;
 
 class SandPainter {
-  // eslint-disable-next-line no-use-before-define
   readonly host: RenderKernel;
   readonly canvas: Canvas2D | Canvas2DHeadless;
 
@@ -124,7 +123,6 @@ class SandPainter {
     alpha: number,
   ) => void;
 
-  // eslint-disable-next-line no-use-before-define
   constructor(host: RenderKernel) {
     this.host = host;
     this.canvas = this.host.canvas;
@@ -208,7 +206,6 @@ class SandPainter {
 }
 
 class Crack {
-  // eslint-disable-next-line no-use-before-define
   readonly host: RenderKernel;
   readonly canvas: Canvas2D | Canvas2DHeadless;
   readonly crackGrid: Array<number>;
@@ -220,7 +217,6 @@ class Crack {
 
   sandPainter: SandPainter | null = null;
 
-  // eslint-disable-next-line no-use-before-define
   constructor(host: RenderKernel) {
     this.host = host;
     this.canvas = this.host.canvas;
@@ -243,6 +239,7 @@ class Crack {
 
   /**
    * Find a starting location for this crack
+   * @param initial - If true, pick a pre-generated seed instead of calling the PRNG
    */
   findStart(initial = false) {
     // shift until crack is found
@@ -528,7 +525,7 @@ class RenderKernel {
   }
 
   /**
-   *
+   * Spawns a new crack
    * @returns If the application has concluded.
    */
   spawnCrack(): boolean {
