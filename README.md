@@ -1,5 +1,5 @@
 # Substrate
 
-![](canvas.jpg)
+![](./canvas.png)
 
 Originally conceived by Jared Tarbell.
