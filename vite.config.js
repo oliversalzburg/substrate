@@ -9,7 +9,7 @@ export default {
     modulePreload: {
       polyfill: false,
     },
-    outDir: "output",
+    outDir: "_site",
   },
   plugins: [viteSingleFile(), createHtmlPlugin()],
 };
