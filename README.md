@@ -2,4 +2,9 @@
 
 ![](public/canvas.png)
 
-Originally conceived by Jared Tarbell.
+Requires calibration on first run. Patience, please.
+
+Click canvas to pause. Click background to fullscreen.
+
+a canvas experiment by Oliver Salzburg  
+inspired by original Substrate artwork by Jared Tarbell
