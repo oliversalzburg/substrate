@@ -127,7 +127,7 @@ class SandPainter {
     this.host = host;
     this.canvas = this.host.canvas;
 
-    this.color = this.host.palette.someColor();
+    this.color = this.host.palette.someColor(this.host.random);
     this.grainDistance = this.host.random.nextRange(0.001, 0.01);
 
     if (this.host.options.blendingAdditive && this.host.options.blendingSubtractive) {
@@ -1096,7 +1096,7 @@ if (IS_WORKER) {
     Application,
     applicationOptions,
     {
-      devMode,
+      devMode: applicationOptions.devMode,
     },
   );
 
