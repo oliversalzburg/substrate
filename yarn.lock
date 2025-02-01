@@ -515,7 +515,6 @@ __metadata:
     typescript-eslint: "npm:8.22.0"
     vite: "npm:6.0.11"
     vite-plugin-html: "npm:3.2.2"
-    vite-plugin-singlefile: "npm:2.1.0"
   languageName: unknown
   linkType: soft
 
@@ -3566,18 +3565,6 @@ __metadata:
   peerDependencies:
     vite: ">=2.0.0"
   checksum: 10c0/34628f44f07a9656875c66ba0c4dbe6be39646c50f961cb771179b930dd5727281836ee4293d7e89fe36043703a0ff40df06b15b90260d48a642420e008eb76a
-  languageName: node
-  linkType: hard
-
-"vite-plugin-singlefile@npm:2.1.0":
-  version: 2.1.0
-  resolution: "vite-plugin-singlefile@npm:2.1.0"
-  dependencies:
-    micromatch: "npm:^4.0.8"
-  peerDependencies:
-    rollup: ^4.28.1
-    vite: ^5.4.11 || ^6.0.0
-  checksum: 10c0/04b41a05ad9228011ec81dc06426b93724adfe8d7b966aa8c6e28da746be3c1b20b17451201172514df84f60b71cd8fe2477d57cd0cc346727c27a41f19702d3
   languageName: node
   linkType: hard
 
