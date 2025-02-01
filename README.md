@@ -1,6 +1,6 @@
 # Substrate
 
-![](public/canvas.png)
+![Screenshot](public/canvas.png)
 
 Requires calibration on first run. Patience, please.
 
