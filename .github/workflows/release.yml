@@ -25,5 +25,5 @@ jobs:
       pull-requests: read
     uses: oliversalzburg/workflows/.github/workflows/publish-browser-app.yml@main
     with:
-      is-canary: false
+      is-canary: true
       wants-github-release: false
