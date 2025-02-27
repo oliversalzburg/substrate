@@ -10,3 +10,4 @@ _site
 build
 node_modules
 output
+tsconfig.tsbuildinfo
