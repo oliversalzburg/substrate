@@ -583,7 +583,7 @@ __metadata:
   dependencies:
     "@biomejs/biome": "npm:1.9.4"
     "@oliversalzburg/js-utils": "npm:0.2.8"
-    "@types/web": "npm:0.0.200"
+    "@types/web": "npm:0.0.208"
     esbuild: "npm:0.25.0"
     rollup: "npm:4.32.1"
     typescript: "npm:5.7.3"
@@ -749,10 +749,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/web@npm:0.0.200":
-  version: 0.0.200
-  resolution: "@types/web@npm:0.0.200"
-  checksum: 10c0/1147ba070ed163c5ff2b65b2e852fc51d5ba09032ec272fe83039b662a89bac5b918d698d09896720bfee015edbc46ae42e30cfc05a0ddb3dad143797831c3cb
+"@types/web@npm:0.0.208":
+  version: 0.0.208
+  resolution: "@types/web@npm:0.0.208"
+  checksum: 10c0/6f634e7d1b68387a4c231d20f183105ac1d5d38219d841dd9e7252ba3513c768073c996978eda1a055fc8094d078e14660313c5ea36d56d227f0671f97d682de
   languageName: node
   linkType: hard
 
