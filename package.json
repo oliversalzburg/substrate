@@ -8,7 +8,7 @@
   "type": "module",
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
-    "@oliversalzburg/js-utils": "0.2.8",
+    "@oliversalzburg/js-utils": "0.2.13",
     "@types/web": "0.0.209",
     "esbuild": "0.25.0",
     "rollup": "4.34.9",
