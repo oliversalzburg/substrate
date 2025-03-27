@@ -9,7 +9,7 @@
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
     "@oliversalzburg/js-utils": "0.2.13",
-    "@types/web": "0.0.213",
+    "@types/web": "0.0.214",
     "esbuild": "0.25.1",
     "rollup": "4.37.0",
     "typescript": "5.8.2",
