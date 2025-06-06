@@ -11,7 +11,7 @@
     "@oliversalzburg/js-utils": "0.3.0",
     "@types/web": "0.0.239",
     "esbuild": "0.25.5",
-    "rollup": "4.41.1",
+    "rollup": "4.42.0",
     "typescript": "5.8.3",
     "vite": "6.3.5",
     "vite-plugin-html": "3.2.2"
