@@ -16,5 +16,5 @@
     "vite": "6.3.5",
     "vite-plugin-html": "3.2.2"
   },
-  "packageManager": "yarn@4.9.1"
+  "packageManager": "yarn@4.9.2"
 }
