@@ -3,23 +3,23 @@ import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { Random, randomRange, seedFromString } from "@oliversalzburg/js-utils/data/random.js";
 import { hashCyrb53 } from "@oliversalzburg/js-utils/data/string.js";
 import { getDocumentElementTypeByIdStrict } from "@oliversalzburg/js-utils/dom/core.js";
+import { CanvasSandbox } from "@oliversalzburg/js-utils/graphics/canvas-sandbox.js";
 import {
   CanvasSandboxHostApplication,
   CanvasWorker,
   CanvasWorkerInstance,
   CanvasWorkerMessageReconfigure,
 } from "@oliversalzburg/js-utils/graphics/canvas-sandbox-mp.js";
-import { CanvasSandbox } from "@oliversalzburg/js-utils/graphics/canvas-sandbox.js";
-import { Canvas2DHeadless } from "@oliversalzburg/js-utils/graphics/canvas2d-headless.js";
 import {
   Canvas2D,
   putPixel32,
   putPixel32Add,
   putPixel32Sub,
 } from "@oliversalzburg/js-utils/graphics/canvas2d.js";
+import { Canvas2DHeadless } from "@oliversalzburg/js-utils/graphics/canvas2d-headless.js";
 import { fromRGBA } from "@oliversalzburg/js-utils/graphics/core.js";
-import { renderPaletteSample } from "@oliversalzburg/js-utils/graphics/palette-sampler.js";
 import { Palette, palette, paletteName } from "@oliversalzburg/js-utils/graphics/palette.js";
+import { renderPaletteSample } from "@oliversalzburg/js-utils/graphics/palette-sampler.js";
 import { MS_PER_FRAME_60FPS } from "@oliversalzburg/js-utils/graphics/render-loop.js";
 import { clamp, cosDegrees, roundTo, sinDegrees } from "@oliversalzburg/js-utils/math/core.js";
 import { Vector2 } from "@oliversalzburg/js-utils/math/vector2.js";
@@ -36,6 +36,17 @@ const applicationOptions = {
   // If you enable both blending modes, every SandPainter will randomly pick one mode.
   blendingAdditive: true,
   blendingSubtractive: false,
+  calibrationData: [
+    {
+      duration: Number.POSITIVE_INFINITY,
+      finished: new Date(),
+      started: new Date(),
+      workerCount: 1,
+    },
+  ],
+  calibrationEarlyExit: true,
+  calibrationMaxWorkers: ABSOLUTE_MAX_WORKERS,
+  calibrationRequired: false,
   canvasColorDark: fromRGBA(0, 0, 0, 5),
   canvasColorLight: fromRGBA(255, 255, 255, 5),
   //crackColor: fromRGBA(50, 50, 50, 255),
@@ -44,18 +55,20 @@ const applicationOptions = {
   cracksMax: 50,
   // How likely is it that a crack will move on a curve instead of a straight line?
   curveChance: 0.01,
-  curveMin: 0.01,
   curveMax: 0.02,
+  curveMin: 0.01,
   darkMode: true,
+
+  devMode: false,
   // Instead of drawing a perfect line, offset each pixel slightly. Value between 0 and 1.
   fuzzyness: 0,
   iterationsPerUpdate: 4,
   // Modulate the cracks direction as it moves. Gives a very organic look.
   modulatePath: false,
   modulatePathAmount: 0.05,
+  padding: 20,
   // The colors to use.
   paletteIndex: 0,
-  padding: 20,
   // 90 degrees is the classic substrate look.
   // Lower values will result in more crystal like structure.
   // This effect is exagregated with preferSingleAngle.
@@ -64,46 +77,33 @@ const applicationOptions = {
   // If preferSingleAngle is set to true, we can either spawn in -DEGREES or +DEGREES direction.
   // If it is set to false, we can also spawn in -DEGREES+90 and +DEGREES+90 direction.
   preferSingleAngle: false,
-  seed: seedFromString("Substrate by Jared Tarbell"),
-  // How far away from the parent crack, should a new crack spawn?
-  // Values 15-30 generate that bizmuth crystal look. Higher values are weird.
-  // TODO: Randomize distance by cracks and evaluate.
-  spawnDistance: 0.61,
-  spawnPerpendicular: 90,
-  spawn45Degrees: 45,
-  // This is currently broken. Don't use.
-  subPixelDrawing: false,
   // Color between the cracks with the SandPainter effect.
   sandPainterActive: true,
   // If true, we color the crack with the same color its SandPainter uses. Otherwise we use crackColor.
   //sandPainterColorsCrack: true,
   sandPainterGrains: 64,
-
-  world: {
-    w: 512,
-    h: 512,
-  },
+  seed: seedFromString("Substrate by Jared Tarbell"),
+  spawn45Degrees: 45,
+  // How far away from the parent crack, should a new crack spawn?
+  // Values 15-30 generate that bizmuth crystal look. Higher values are weird.
+  // TODO: Randomize distance by cracks and evaluate.
+  spawnDistance: 0.61,
+  spawnPerpendicular: 90,
+  // This is currently broken. Don't use.
+  subPixelDrawing: false,
   viewport: {
+    h: 1,
+    w: 1,
     x: 0,
     y: 0,
-    w: 1,
-    h: 1,
   },
 
-  devMode: false,
-
   workerCount: 1,
-  calibrationRequired: false,
-  calibrationEarlyExit: true,
-  calibrationMaxWorkers: ABSOLUTE_MAX_WORKERS,
-  calibrationData: [
-    {
-      workerCount: 1,
-      started: new Date(),
-      finished: new Date(),
-      duration: Number.POSITIVE_INFINITY,
-    },
-  ],
+
+  world: {
+    h: 512,
+    w: 512,
+  },
 };
 
 type ApplicationOptions = typeof applicationOptions;
@@ -484,18 +484,18 @@ class RenderKernel {
     }
 
     const viewportPixels = {
+      h:
+        this.options.viewport.h * this.options.world.h +
+        (this.options.viewport.h === 1 ? -this.options.padding : 0),
+      w:
+        this.options.viewport.w * this.options.world.w +
+        (this.options.viewport.w === 1 ? -this.options.padding : 0),
       x:
         this.options.viewport.x * this.options.world.w +
         (this.options.viewport.x === 0 ? this.options.padding : 0),
       y:
         this.options.viewport.y * this.options.world.h +
         (this.options.viewport.y === 0 ? this.options.padding : 0),
-      w:
-        this.options.viewport.w * this.options.world.w +
-        (this.options.viewport.w === 1 ? -this.options.padding : 0),
-      h:
-        this.options.viewport.h * this.options.world.h +
-        (this.options.viewport.h === 1 ? -this.options.padding : 0),
     };
     const isWithinViewport = (crack: Crack): boolean =>
       viewportPixels.x < crack.position.x &&
@@ -543,7 +543,7 @@ class RenderKernel {
         );
       }
 
-      this.host.postMessage({ type: "sceneFinish", timestamp: new Date().valueOf() });
+      this.host.postMessage({ timestamp: new Date().valueOf(), type: "sceneFinish" });
     }
 
     if (this.currentCrackCount < this.options.cracksMax) {
@@ -668,10 +668,10 @@ class Application extends CanvasSandboxHostApplication<Canvas2D, ApplicationOpti
       const worker = new CanvasWorker(canvasId, new URL(import.meta.url), canvasNode, {
         ...this.options,
         viewport: {
+          h: 1,
+          w: roundTo(workerIndex * step + step, 3),
           x: roundTo(workerIndex * step, 3),
           y: 0,
-          w: roundTo(workerIndex * step + step, 3),
-          h: 1,
         },
       });
       this.workers.push(worker);
@@ -782,16 +782,16 @@ class Application extends CanvasSandboxHostApplication<Canvas2D, ApplicationOpti
       worker.canvasOffscreen = canvasOffscreen;
       worker.postMessage(
         {
-          type: "reconfigure",
-          id: worker.id,
           canvas: canvasOffscreen,
-          width: canvasNode.width,
           height: canvasNode.height,
+          id: worker.id,
           options: {
             ...this.options,
             seed: this.random.seed,
             viewport: worker.options.viewport,
           },
+          type: "reconfigure",
+          width: canvasNode.width,
         } as CanvasWorkerMessageReconfigure<ApplicationOptions>,
         [canvasOffscreen],
       );
@@ -934,18 +934,18 @@ class Application extends CanvasSandboxHostApplication<Canvas2D, ApplicationOpti
       worker.canvasOffscreen = canvasWorker;
       worker.postMessage(
         {
-          type: "reconfigure",
-          id: worker.id,
           canvas: canvasWorker,
-          width: canvasNode.width,
           height: canvasNode.height,
+          id: worker.id,
           options: {
             ...worker.options,
             world: {
-              w: this.canvas.width,
               h: this.canvas.height,
+              w: this.canvas.width,
             },
           },
+          type: "reconfigure",
+          width: canvasNode.width,
         } as CanvasWorkerMessageReconfigure<ApplicationOptions>,
         [canvasWorker],
       );
