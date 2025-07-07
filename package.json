@@ -10,7 +10,7 @@
     "@biomejs/biome": "2.0.6",
     "@oliversalzburg/js-utils": "0.4.3",
     "@types/web": "0.0.245",
-    "esbuild": "0.25.5",
+    "esbuild": "0.25.6",
     "rollup": "4.44.2",
     "typescript": "5.8.3",
     "vite": "7.0.2",
