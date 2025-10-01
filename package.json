@@ -12,7 +12,7 @@
     "@types/web": "0.0.271",
     "esbuild": "0.25.10",
     "rollup": "4.52.3",
-    "typescript": "5.9.2",
+    "typescript": "5.9.3",
     "vite": "7.1.7",
     "vite-plugin-html": "3.2.2"
   }
