@@ -13,7 +13,7 @@
     "esbuild": "0.25.10",
     "rollup": "4.52.3",
     "typescript": "5.9.3",
-    "vite": "7.1.7",
+    "vite": "7.1.8",
     "vite-plugin-html": "3.2.2"
   }
 }
